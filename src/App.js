@@ -1,11 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from './components/button/button'
 import StartPage from './pages/start/start'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import Landing from './pages/landing/landing'
+import './App.css'
+import { useInView } from 'react-hook-inview'
+import { useVisible } from 'react-hooks-visible'
 
 function App() {
   const [name, setName] = useState('Please press the button, to rename me.')
+  const [opacityColor, setOpacityColor] = useState(1)
+  const [refIsInView, isInView] = useInView({
+    threshold: 1,
+  })
+  const [refUseIsVisible, isVisible] = useVisible()
+
+  useEffect(() => {
+    console.log(isInView)
+  }, [isInView])
+
+  useEffect(() => {
+    console.log(isVisible)
+    setOpacityColor(isVisible)
+  }, [isVisible])
 
   const run = (val) => {
     setName(val)
@@ -36,6 +53,19 @@ function App() {
           <Route path="/landing" exact element={<Landing />} />
         </Routes>
       </Router>
+
+      <div className="box1"></div>
+      <div className="box1"></div>
+      <div className="box1"></div>
+      <div className="box1"></div>
+      <div ref={refIsInView} className="box2"></div>
+      <div className="box1"></div>
+      <div
+        ref={refUseIsVisible}
+        className="box3"
+        style={{ opacity: opacityColor }}
+      ></div>
+      <div className="box1"></div>
     </div>
   )
 }
